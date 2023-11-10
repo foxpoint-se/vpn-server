@@ -2,7 +2,7 @@
   "name": "vpn-server",
   "version": "0.1.0",
   "bin": {
-    "vpn-server": "bin/vpn-server.js"
+    "deploy": "bin/deploy.js"
   },
   "scripts": {
     "build": "tsc",
