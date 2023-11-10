@@ -13,3 +13,5 @@ get-lightsail-pk:		## get lightsail default private key
 	echo "${MY_VAR}" | ssh -q -i /dev/stdin ubuntu@34.253.172.237 'hostnamectl'; \
 	exit 0;
 
+ssh-ish:		## SSH to EC2 using .pem file
+	ssh -i "TestRemoveThis.pem" ubuntu@ec2-3-254-176-146.eu-west-1.compute.amazonaws.com
