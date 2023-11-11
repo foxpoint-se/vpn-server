@@ -127,7 +127,7 @@ export class VpnEc2UbuntuStack extends cdk.Stack {
 
     // SSH Command to connect to the EC2 Instance
     new cdk.CfnOutput(this, "sshCommand", {
-      value: `ssh -i "TestRemoveThis.pem" ubuntu@${instance.instancePublicDnsName}`,
+      value: `ssh -i "<key-name>.pem" ubuntu@${instance.instancePublicDnsName}`,
     });
   }
 }

@@ -13,15 +13,11 @@ get-lightsail-pk:		## get lightsail default private key
 	echo "${MY_VAR}" | ssh -q -i /dev/stdin ubuntu@34.253.172.237 'hostnamectl'; \
 	exit 0;
 
-# ssh -i "TestRemoveThis.pem" ubuntu@ec2-3-254-176-146.eu-west-1.compute.amazonaws.com
-# ssh -i "TestRemoveThis.pem" ec2-user@ec2-54-75-43-46.eu-west-1.compute.amazonaws.com
-# ssh -i "TestRemoveThis.pem" ubuntu@ec2-34-252-88-24.eu-west-1.compute.amazonaws.com
 ssh-ish:		## SSH to EC2 using .pem file
 	ssh -i "root.pem" ubuntu@ec2-54-195-8-112.eu-west-1.compute.amazonaws.com
 
 setup-keypair-pem:		## get key pair for root ssh access
-	aws --region=eu-west-1 ssm get-parameters --names "/ec2/keypair/key-009299c0be0071596" --with-decryption --query "Parameters[*].{Value:Value}" --output text > root.pem
-	chmod 400 root.pem
+	./scripts/setup-keypair-pem.sh
 
 setup-deploy:
 	cd deploy && yarn
