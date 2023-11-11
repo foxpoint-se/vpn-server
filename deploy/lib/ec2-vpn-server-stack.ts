@@ -33,7 +33,7 @@ export class EC2VpnServerStack extends cdk.Stack {
   }
 }
 
-export class SimpleEc2Stack extends cdk.Stack {
+export class VpnEc2UbuntuStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     // its important to add our env config here otherwise CDK won't know our AWS account number
     super(scope, id, props);
@@ -41,28 +41,28 @@ export class SimpleEc2Stack extends cdk.Stack {
     // Get the default VPC. This is the network where your instance will be provisioned
     // All activated regions in AWS have a default vpc.
     // You can create your own of course as well. https://aws.amazon.com/vpc/
-    const defaultVpc = cdk.aws_ec2.Vpc.fromLookup(this, "VPC", {
+    const defaultVpc = cdk.aws_ec2.Vpc.fromLookup(this, "DefaultVPC", {
       isDefault: true,
     });
+
+    const instanceName = "vpn-server";
 
     // Lets create a role for the instance
     // You can attach permissions to a role and determine what your
     // instance can or can not do
-    const role = new cdk.aws_iam.Role(
-      this,
-      "simple-instance-1-role", // this is a unique id that will represent this resource in a Cloudformation template
-      { assumedBy: new cdk.aws_iam.ServicePrincipal("ec2.amazonaws.com") }
-    );
+    const role = new cdk.aws_iam.Role(this, `${instanceName}-role`, {
+      assumedBy: new cdk.aws_iam.ServicePrincipal("ec2.amazonaws.com"),
+    });
 
     // lets create a security group for our instance
     // A security group acts as a virtual firewall for your instance to control inbound and outbound traffic.
     const securityGroup = new cdk.aws_ec2.SecurityGroup(
       this,
-      "simple-instance-1-sg",
+      `${instanceName}-security-group`,
       {
         vpc: defaultVpc,
         allowAllOutbound: true, // will let your instance send outboud traffic
-        securityGroupName: "simple-instance-1-sg",
+        securityGroupName: `${instanceName}-security-group`,
       }
     );
 
@@ -93,12 +93,18 @@ export class SimpleEc2Stack extends cdk.Stack {
 
     const ubuntuDistro: "focal" | "jammy" = "jammy";
 
+    const keyPairName = "root-vpn-server-key-pair";
+
+    const keyPair = new cdk.aws_ec2.CfnKeyPair(this, keyPairName, {
+      keyName: keyPairName,
+    });
+
     // Finally lets provision our ec2 instance
-    const instance = new cdk.aws_ec2.Instance(this, "simple-instance-1", {
+    const instance = new cdk.aws_ec2.Instance(this, instanceName, {
       vpc: defaultVpc,
       role: role,
       securityGroup: securityGroup,
-      instanceName: "simple-instance-1",
+      instanceName: instanceName,
       instanceType: cdk.aws_ec2.InstanceType.of(
         // t2.micro has free tier usage in aws
         cdk.aws_ec2.InstanceClass.T2,
@@ -109,12 +115,13 @@ export class SimpleEc2Stack extends cdk.Stack {
         {}
       ),
       // TODO: another key?
-      keyName: "TestRemoveThis", // we will create this in the console before we deploy
+      // keyName: "TestRemoveThis", // we will create this in the console before we deploy
+      keyName: keyPair.keyName, // we will create this in the console before we deploy
     });
 
     // cdk lets us output prperties of the resources we create after they are created
     // we want the ip address of this new instance so we can ssh into it later
-    new cdk.CfnOutput(this, "simple-instance-1-output", {
+    new cdk.CfnOutput(this, "publicIp", {
       value: instance.instancePublicIp,
     });
 
