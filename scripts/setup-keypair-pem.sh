@@ -31,7 +31,7 @@ echo "Removing $pemFileName"
 removeFile $pemFileName
 
 echo "Getting key pair ID with name $keyName"
-keyPairId=$(getKeyPairId "$keyName" 2>/dev/null)
+keyPairId=$(getKeyPairId "$keyName")
 
 echo "Creating pem file $pemFileName for $keyPairId in region $awsRegion"
 createPemFile $keyPairId $pemFileName $awsRegion

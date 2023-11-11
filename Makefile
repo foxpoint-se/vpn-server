@@ -7,14 +7,8 @@ help:
 
 .DEFAULT_GOAL := help
 
-get-lightsail-pk:		## get lightsail default private key
-	@export MY_VAR=$$(aws lightsail download-default-key-pair | jq ".privateKeyBase64"); \
-	echo "$${MY_VAR}"; \
-	echo "${MY_VAR}" | ssh -q -i /dev/stdin ubuntu@34.253.172.237 'hostnamectl'; \
-	exit 0;
-
-ssh-ish:		## SSH to EC2 using .pem file
-	ssh -i "root.pem" ubuntu@ec2-54-195-8-112.eu-west-1.compute.amazonaws.com
+ssh-to-server:		## SSH to server using .pem file
+	./scripts/ssh-to-server.sh
 
 setup-keypair-pem:		## get key pair for root ssh access
 	./scripts/setup-keypair-pem.sh
