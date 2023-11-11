@@ -16,6 +16,7 @@ const app = new cdk.App();
 //   env: { account: "485563272586", region: "eu-west-1" },
 // });
 
-new VpnEc2UbuntuStack(app, "TestVpnStack", {
+// TODO: rename to VpnEc2UbuntuStack
+new VpnEc2UbuntuStack(app, "VpnEc2UbuntuStack", {
   env: { account: "485563272586", region: "eu-west-1" },
 });
