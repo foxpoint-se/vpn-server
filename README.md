@@ -14,6 +14,8 @@ make ssh-to-server                  SSH to server using .pem file
 
 ## TODO
 
+- [x] An Ubuntu server deployed with CDK
+- [x] An easy way to SSH into that server
 - [ ] Some local version of this server for easier development
 - [ ] Wireguard server
 - [ ] An easy way to connect to that Wireguard server
