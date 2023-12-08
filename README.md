@@ -20,3 +20,4 @@ make ssh-to-server                  SSH to server using .pem file
 - [ ] Wireguard server
 - [ ] An easy way to connect to that Wireguard server
 - [ ] CI/CD
+- [ ] Domain instead of IP
