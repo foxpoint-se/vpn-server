@@ -37,7 +37,7 @@ export interface EC2VpnServerStackProps extends cdk.StackProps {}
 // }
 
 // const vars = {efsId: Efs.fileSystemId};
-// const rawData = fs.readFileSync("./entrypoint/simplelog.sh", "utf8");
+// const rawData = fs.readFileSync("./entrypoint/setup.sh", "utf8");
 // const userData = ec2.UserData.custom(cdk.Fn.sub(rawData, vars));
 // const asg = new AutoScalingGroup(this, 'ASG', {userData: userData});
 
@@ -98,7 +98,7 @@ export class VpnEc2UbuntuStack extends cdk.Stack {
     //   cdk.aws_ec2.Port.udp(51820),
     //   'Allows UDP access from Internet to Wireguard'
     // )
-    const initScriptPath = "../entrypoint/simplelog.sh";
+    const initScriptPath = "../entrypoint/setup.sh";
     const userDataText = readFileSync(initScriptPath, "utf8");
 
     const userData = UserData.custom(userDataText);

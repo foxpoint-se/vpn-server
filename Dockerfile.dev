@@ -1,5 +1,12 @@
 FROM ubuntu:22.04
 
+# install packages already available in ec2
+RUN apt update
+RUN apt install wget -y
+
+# put the scripts somewhere to be able to execute them
 RUN mkdir -p /entrypoint
 COPY ./entrypoint/ /entrypoint/
-RUN /bin/bash -c '/entrypoint/simplelog.sh'
+
+# this is what we'll use as user data to ec2
+RUN /bin/bash -c '/entrypoint/setup.sh'
