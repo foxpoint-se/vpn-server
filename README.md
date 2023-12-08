@@ -16,8 +16,9 @@ make ssh-to-server                  SSH to server using .pem file
 
 - [x] An Ubuntu server deployed with CDK
 - [x] An easy way to SSH into that server
-- [ ] Some local version of this server for easier development
-- [ ] Wireguard server
+- [x] Some local version of this server for easier development
+- [ ] Script that sets up Wireguard in the Docker container
+- [ ] Make that script work in EC2
 - [ ] An easy way to connect to that Wireguard server
 - [ ] CI/CD
 - [ ] Domain instead of IP
