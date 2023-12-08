@@ -1,0 +1,5 @@
+FROM ubuntu:22.04
+
+RUN mkdir -p /entrypoint
+COPY ./entrypoint/ /entrypoint/
+RUN /bin/bash -c '/entrypoint/simplelog.sh'
