@@ -1,37 +1,45 @@
 import * as cdk from "aws-cdk-lib";
+import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
+import * as fs from "fs";
+import { readFileSync } from "fs";
 
 export interface EC2VpnServerStackProps extends cdk.StackProps {}
 
-export class EC2VpnServerStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: EC2VpnServerStackProps) {
-    super(scope, id, props);
+// export class EC2VpnServerStack extends cdk.Stack {
+//   constructor(scope: Construct, id: string, props: EC2VpnServerStackProps) {
+//     super(scope, id, props);
 
-    // Create a VPC (Virtual Private Cloud) for your EC2 instance
-    const vpc = new cdk.aws_ec2.Vpc(this, "TestVpcFromCdk", {
-      maxAzs: 2, // Specify the desired number of Availability Zones
-    });
+//     // Create a VPC (Virtual Private Cloud) for your EC2 instance
+//     const vpc = new cdk.aws_ec2.Vpc(this, "TestVpcFromCdk", {
+//       maxAzs: 2, // Specify the desired number of Availability Zones
+//     });
 
-    // Define the user data script to run on instance launch
-    const userData = cdk.aws_ec2.UserData.forLinux();
-    userData.addCommands(
-      "#!/bin/bash",
-      'echo "This is my setup script" >> /var/log/setup.log'
-      // Add any additional commands you want to run on launch
-    );
+//     // Define the user data script to run on instance launch
+//     const userData = cdk.aws_ec2.UserData.forLinux();
+//     userData.addCommands(
+//       "#!/bin/bash",
+//       'echo "This is my setup script" >> /var/log/setup.log'
+//       // Add any additional commands you want to run on launch
+//     );
 
-    // Create an EC2 instance
-    const ec2Instance = new cdk.aws_ec2.Instance(this, "TestEC2FromCdk", {
-      instanceType: cdk.aws_ec2.InstanceType.of(
-        cdk.aws_ec2.InstanceClass.BURSTABLE2,
-        cdk.aws_ec2.InstanceSize.MICRO
-      ),
-      machineImage: cdk.aws_ec2.MachineImage.latestAmazonLinux(), // Use the latest Amazon Linux 2 AMI
-      vpc,
-      userData, // Attach the user data script
-    });
-  }
-}
+//     // Create an EC2 instance
+//     const ec2Instance = new cdk.aws_ec2.Instance(this, "TestEC2FromCdk", {
+//       instanceType: cdk.aws_ec2.InstanceType.of(
+//         cdk.aws_ec2.InstanceClass.BURSTABLE2,
+//         cdk.aws_ec2.InstanceSize.MICRO
+//       ),
+//       machineImage: cdk.aws_ec2.MachineImage.latestAmazonLinux(), // Use the latest Amazon Linux 2 AMI
+//       vpc,
+//       userData, // Attach the user data script
+//     });
+//   }
+// }
+
+// const vars = {efsId: Efs.fileSystemId};
+// const rawData = fs.readFileSync("./entrypoint/simplelog.sh", "utf8");
+// const userData = ec2.UserData.custom(cdk.Fn.sub(rawData, vars));
+// const asg = new AutoScalingGroup(this, 'ASG', {userData: userData});
 
 export class VpnEc2UbuntuStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -90,6 +98,17 @@ export class VpnEc2UbuntuStack extends cdk.Stack {
     //   cdk.aws_ec2.Port.udp(51820),
     //   'Allows UDP access from Internet to Wireguard'
     // )
+    const initScriptPath = "../entrypoint/simplelog.sh";
+    const userDataText = readFileSync(initScriptPath, "utf8");
+
+    const userData = UserData.custom(userDataText);
+
+    // const userData = cdk.aws_ec2.UserData.forLinux();
+    // userData.addCommands(
+    //   "#!/bin/bash",
+    //   'echo "This is my setup script" >> /var/log/setup.log'
+    //   // Add any additional commands you want to run on launch
+    // );
 
     const ubuntuDistro: "focal" | "jammy" = "jammy";
 
@@ -117,6 +136,7 @@ export class VpnEc2UbuntuStack extends cdk.Stack {
       // TODO: another key?
       // keyName: "TestRemoveThis", // we will create this in the console before we deploy
       keyName: keyPair.keyName, // we will create this in the console before we deploy
+      userData,
     });
 
     // cdk lets us output prperties of the resources we create after they are created

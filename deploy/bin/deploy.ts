@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
-import { VpnServerStack } from "../lib/vpn-server-stack";
+// import { VpnServerStack } from "../lib/vpn-server-stack";
 import {
-  EC2VpnServerStack,
+  // EC2VpnServerStack,
   VpnEc2UbuntuStack,
 } from "../lib/ec2-vpn-server-stack";
 
