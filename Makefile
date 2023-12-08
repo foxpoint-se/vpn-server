@@ -21,9 +21,14 @@ setup: setup-deploy		## install and setup everything for development
 cdk-deploy-server:
 	cd deploy && yarn cdk deploy --all --require-approval never
 
+cdk-destroy-server:
+	cd deploy && yarn cdk destroy
+
 cdk-diff-server:
 	cd deploy && yarn cdk diff
 
 diff: setup cdk-diff-server		## cdk diff
 
 deploy: setup cdk-deploy-server		## deploy everything
+
+destroy: setup cdk-destroy-server		## take the server down
