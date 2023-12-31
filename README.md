@@ -1,5 +1,11 @@
 # VPN server
 
+VPN server using Wireguard and WG Easy.
+
+Consists of two stacks: one which is always deployed to hopefully make other deploys quicker and one which should be destroyed after each use, to save some dollars.
+
+`make destroy` saves current WG configuration in Secrets Manager before the stack is tore down. When the stack is deployed the config files are again pulled from Secrets Manager, so we can continue where we left off.
+
 ## Get started
 
 Run `make` to get all possible commands. At the moment of writing the available commands are:
