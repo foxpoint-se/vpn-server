@@ -39,5 +39,6 @@ One procedure could be as follows:
 - [ ] ~~Script that sets up Wireguard in the Docker container~~
 - [ ] ~~Make that script work in EC2~~
 - [x] An easy way to connect to that Wireguard server
-- [ ] CI/CD
+- [x] CI/CD
+  - [x] CDK diff on push to main
 - [x] Domain instead of IP

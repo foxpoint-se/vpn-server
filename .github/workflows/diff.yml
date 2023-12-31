@@ -1,0 +1,32 @@
+name: CDK diff VPN server stack
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+          cache-dependency-path: docs/yarn.lock
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: "eu-west-1"
+      - run: make diff
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_BUILD_CHANNEL }}
+          status: ${{ job.status }}
+          title: "Diff VPN server stack"
+          username: GitHub Actions
+          avatar_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
