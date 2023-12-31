@@ -11,12 +11,25 @@ Consists of two stacks: one which is always deployed to hopefully make other dep
 Run `make` to get all possible commands. At the moment of writing the available commands are:
 
 ```bash
-make deploy                         deploy everything
-make diff                           cdk diff
-make setup-keypair-pem              get key pair for root ssh access
-make setup                          install and setup everything for development
-make ssh-to-server                  SSH to server using .pem file
+deploy                         deploy everything
+destroy-everything             destroy everything
+destroy                        destroy part of the stack after saving state
+diff                           cdk diff
+setup-keypair-pem              get key pair for root ssh access
+setup                          install and setup everything for development
+ssh-to-server                  SSH to server using .pem file
 ```
+
+One procedure could be as follows:
+
+1. `git clone` this repo.
+1. Run `make setup` to install dependencies locally.
+1. If the server isn't currently running in AWS, run `make deploy`.
+1. Wait for a few minutes.
+1. Connect to the VPN if you feel like it.
+1. To see what's going on inside the EC2, run `make setup-keypair-pem` and then `make ssh-to-server`.
+1. When done, run `make destroy`.
+1. Go home.
 
 ## TODO
 
