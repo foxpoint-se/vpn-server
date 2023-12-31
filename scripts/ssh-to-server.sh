@@ -1,6 +1,6 @@
-serverName=vpn-server
+serverName=vpn-wg-server
 pemFileName=root.pem
-userName=ubuntu
+userName=ec2-user
 
 getPublicDns() {
     name=$1
