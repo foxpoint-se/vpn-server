@@ -1,4 +1,4 @@
-keyName=root-vpn-server-key-pair
+keyName=vpn-server-ec2-key-pair
 pemFileName=root.pem
 awsRegion=eu-west-1
 
